@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
     });
 
     const uniqueDates = new Set(
-      d?.map((v) => v.createdAt.toISOString().split("T")[0]), // Extract date portion
+      d?.map((v:{ content: string; createdAt: Date }) => v.createdAt.toISOString().split("T")[0]), // Extract date portion
     );
 
     return NextResponse.json({
