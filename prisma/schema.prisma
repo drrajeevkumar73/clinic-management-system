@@ -9,18 +9,20 @@ datasource db {
 }
 
 model User {
-  id           String     @id 
+  id           String  @id
   displayname  String
   email        String  @unique
   dipartment   String
   passwordHash String
   googleId     String? @unique
   avatarUrl    String?
+  admin        Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  sessions Session[]
+  sessions   Session[]
+  Todayswork Todayswork[]
 
   @@map("users")
 }
@@ -33,4 +35,17 @@ model Session {
   user User @relation(references: [id], fields: [userId], onDelete: Cascade)
 
   @@map("sessions")
+}
+
+model Todayswork {
+  id      String    @id @default(cuid())
+  dob     DateTime?
+  content String
+
+  userId String
+  User   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@map("todayswork")
 }

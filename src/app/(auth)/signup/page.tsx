@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function Signup() {
   return (
-    <div className="flex h-screen w-full items-center justify-center p-5">
+    <main className="flex h-screen w-full items-center justify-center p-5">
       <div className="flex h-full max-h-[40rem] w-full max-w-[64rem] overflow-hidden rounded-2xl bg-card shadow-2xl">
         <div className="w-full space-y-5 overflow-y-auto p-10 md:w-1/2">
           <div className="space-y-5">
@@ -32,6 +32,6 @@ export default function Signup() {
           className="hidden w-1/2 object-cover md:block"
         />
       </div>
-    </div>
+    </main>
   );
 }

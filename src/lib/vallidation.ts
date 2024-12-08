@@ -20,3 +20,22 @@ export const loginSchema = z
 export type LoginValues = z.infer<typeof loginSchema>;
 
 
+export const formSchema = z.object({
+  content:z.string().trim()
+})
+export type FormValue= z.infer<typeof formSchema>;
+
+
+
+export const calenderSchema = z.object({
+  monthname:requiredString
+})
+
+export type CalederValue= z.infer<typeof calenderSchema>;
+
+export const serchSchema = z.object({
+  username:requiredString,
+  monthname:requiredString
+})
+
+export type SerchValue= z.infer<typeof serchSchema>;
