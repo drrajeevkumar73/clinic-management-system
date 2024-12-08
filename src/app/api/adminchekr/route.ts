@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    const d = userData?.Todayswork.filter((v) => {
+    const d = userData?.Todayswork.filter((v:any) => {
       if (monthname && monthname !== "Today") {
         // Filter by the provided monthname
         return monthname === formatRelativeMonth(v.createdAt);
