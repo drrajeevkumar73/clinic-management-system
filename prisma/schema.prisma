@@ -23,6 +23,7 @@ model User {
 
   sessions   Session[]
   Todayswork Todayswork[]
+  StaffWork  StaffWork[]
 
   @@map("users")
 }
@@ -48,4 +49,35 @@ model Todayswork {
   createdAt DateTime @default(now())
 
   @@map("todayswork")
+}
+
+model StaffWork {
+  id     String  @id @default(cuid())
+  userId String
+  task1  String
+  task2  String?
+  task3  String?
+  task4  String?
+  task5  String?
+  task6  String?
+  task7  String?
+  task8  String?
+  task9  String?
+  task10 String?
+  task11 String?
+  task12 String?
+  task13 String?
+  task14 String?
+  task15 String?
+  task16 String?
+  task17 String?
+  task18 String?
+  task19 String?
+  task20 String?
+
+  User User @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@map("staffWork")
 }

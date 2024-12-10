@@ -1,25 +1,29 @@
+import { validateRequest } from "@/auth";
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
-  
   try {
-    const userData = await prisma.user.findMany({
-      select: {
-        id:true,
-        displayname: true,
-      },
-    });
+    const { user } = await validateRequest();
+    if (!user) throw Error("unathorized");
 
-    return NextResponse.json(userData)
+    const useWork=await prisma.staffWork.findMany({
+        where:{
+            userId:user.id
+        },
+     orderBy:{createdAt:"desc"}
+        
+    })
+
+    return NextResponse.json(useWork)
   } catch (error) {
     console.error("Error occurred:", error);
     return NextResponse.json(
       {
-        error:error,
         success: false,
         message: "Internal server error",
       },
+      
       { status: 500 },
     );
   }
