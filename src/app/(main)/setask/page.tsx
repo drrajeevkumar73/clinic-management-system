@@ -1,7 +1,10 @@
-import React from 'react'
-import Seetask from './Seetask'
+import React from "react";
+import Seetask from "./Seetask";
 
 export default function Setask() {
   return (
-    <Seetask/>  )
+    <div className="flex flex-col items-center gap-7">
+      <Seetask />
+    </div>
+  );
 }

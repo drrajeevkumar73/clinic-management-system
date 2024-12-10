@@ -61,3 +61,11 @@ export const addtaskSchema = z.object({
 });
 
 export type AddtaskValue = z.infer<typeof addtaskSchema>;
+
+export const addtaskUsernameSchema = z.object({
+  monthname:requiredString,
+
+
+})
+
+export type AddtaskUsernameValue = z.infer<typeof addtaskUsernameSchema>;
