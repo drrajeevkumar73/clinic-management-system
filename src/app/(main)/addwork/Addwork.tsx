@@ -327,7 +327,7 @@ export default function Addwork() {
             name="username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Select department for give some today&lsquo;s task for staff.</FormLabel>
+                <FormLabel><p>Select department for give some today&lsquo;s task for staff.</p></FormLabel>
                 <FormControl>
                   <Select
                     onValueChange={field.onChange}
