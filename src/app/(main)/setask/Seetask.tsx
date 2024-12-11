@@ -31,6 +31,7 @@ import { useEffect, useState } from "react";
 import { addtaskUsernameSchema, AddtaskUsernameValue } from "@/lib/vallidation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useAppSelector } from "@/lib/hooks";
 interface UserData {
   createdAt: string;
   task1: string;
@@ -69,7 +70,6 @@ export default function Seetask() {
   const [loding, setloding] = useState(false);
   const [client, setclient] = useState<ClientResponse | null>(null);
 
-  console.log(client);
 
   const onSubmit = async (monthname: AddtaskUsernameValue) => {
     try {
@@ -77,6 +77,7 @@ export default function Seetask() {
       const { data } = await axios.post<ClientResponse>("/api/seetask", {
         monthname,
       });
+   
       setclient(data);
     } catch (error) {
       console.error(error);
@@ -84,7 +85,8 @@ export default function Seetask() {
       setloding(false);
     }
   };
-
+  const { user } = useAppSelector((state) => state.loginlice);
+  if (!user) throw new Error("unauthorized");
   return (
     <>
       <Form {...form}>
@@ -97,7 +99,7 @@ export default function Seetask() {
             name="monthname"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Work history</FormLabel>
+                <FormLabel><span className="text-muted-foreground italic">{user.displayname} </span> What You Have To Do Toady&lsquo;s ? That Is Given By Admin.</FormLabel>
                 <Select
                   onValueChange={(monthname: any) => onSubmit(monthname)}
                   defaultValue={field.value}

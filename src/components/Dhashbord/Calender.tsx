@@ -9,13 +9,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-  } from "@/components/ui/card"
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -51,21 +51,24 @@ export default function Calender({ className }: classNameProps) {
 
   const [data, setdata] = useState<[]>();
   const [totalpresent, setPresent] = useState<number>();
-  
+  const [loding, setloding] = useState(false);
+
   const onSubmit = async (monthname: CalederValue) => {
-    const data = await axios.post("/api/dashbord", { monthname });
-   
-    setdata(data.data.data);
-    setPresent(data.data.totalPresent)
+    try {
+      setloding(true);
+      const data = await axios.post("/api/dashbord", { monthname });
+
+      setdata(data.data.data);
+      setPresent(data.data.totalPresent);
+    } catch (error) {
+    } finally {
+      setloding(false);
+    }
   };
-  const {user}=useAppSelector((state)=>state.loginlice)
-  if(!user) throw new Error("unauthorized")
+  const { user } = useAppSelector((state) => state.loginlice);
+  if (!user) throw new Error("unauthorized");
   return (
     <>
-
-
-
-
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -76,7 +79,12 @@ export default function Calender({ className }: classNameProps) {
             name="monthname"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Work history</FormLabel>
+                <FormLabel>
+                  <span className="italic text-muted-foreground">
+                    {user.displayname}
+                  </span>{" "}
+                  Check Your Work History By Selecting Month Name.{" "}
+                </FormLabel>
                 <Select
                   onValueChange={(monthname: any) => onSubmit(monthname)}
                   defaultValue={field.value}
@@ -106,53 +114,76 @@ export default function Calender({ className }: classNameProps) {
               </FormItem>
             )}
           />
-          {/* <Button type="submit">Submit</Button> */}
         </form>
       </Form>
 
       <Card>
-  <CardHeader>
-    <CardTitle>Full Name: &nbsp;&nbsp;<span className="text-primary">{user.displayname}</span></CardTitle>
-  </CardHeader>
-  <CardHeader>
-    <CardTitle>Department : &nbsp;&nbsp;<span className="text-primary">{user.dipartment}</span></CardTitle>
-  </CardHeader>
-  <CardHeader>
-    <CardTitle>Total present in this month : &nbsp;&nbsp;<span className="text-primary">{totalpresent}</span></CardTitle>
-  </CardHeader>
- 
-</Card>
+        <CardHeader>
+          <CardTitle>
+            Full Name: &nbsp;&nbsp;
+            <span className="text-primary">{user.displayname}</span>
+          </CardTitle>
+        </CardHeader>
+        <CardHeader>
+          <CardTitle>
+            Department : &nbsp;&nbsp;
+            <span className="text-primary">{user.dipartment}</span>
+          </CardTitle>
+        </CardHeader>
+        <CardHeader>
+          <CardTitle>
+            Total present in this month : &nbsp;&nbsp;
+            <span className="text-primary">{totalpresent}</span>
+          </CardTitle>
+        </CardHeader>
+      </Card>
 
       <Table>
         <TableHeader className="border border-primary">
           <TableRow className="border border-primary bg-primary">
-            <TableHead className="w-[100px] ">Date</TableHead>
-
+            <TableHead className="w-[100px]">Date</TableHead>
             <TableHead>Work</TableHead>
             <TableHead className="text-right">Time</TableHead>
           </TableRow>
         </TableHeader>
 
-        {data?.map((v: any, i) => (
-        
+        {loding ? (
+          // Loading message
+          <TableBody>
+            <TableRow>
+              <TableCell colSpan={3} className="">
+                Loading...
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        ) : data?.length === 0 ? (
+          // No Data Found message
+          <TableBody>
+            <TableRow>
+              <TableCell colSpan={3} className="">
+                No Data Found
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        ) : (
+          // Data rendering
+          data?.map((v: any, i) => (
             <TableBody className="border border-primary" key={i}>
               <TableRow>
                 <TableCell className="font-medium">
                   {formatRelativeMonthDate(v.createdAt)}
                 </TableCell>
-
-                <TableCell className="whitespace-pre-line break-words">{v.content}</TableCell>
-                <TableCell className="text-right">{formatRelativeTime(v.createdAt)}</TableCell>
+                <TableCell className="whitespace-pre-line break-words">
+                  {v.content}
+                </TableCell>
+                <TableCell className="text-right">
+                  {formatRelativeTime(v.createdAt)}
+                </TableCell>
               </TableRow>
             </TableBody>
-         
-        ))}
+          ))
+        )}
       </Table>
-
-
-
-
-
     </>
   );
 }

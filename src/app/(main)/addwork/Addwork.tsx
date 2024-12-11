@@ -31,6 +31,7 @@ import { useEffect, useState } from "react";
 
 import { useForm } from "react-hook-form";
 import axios, { isAxiosError } from "axios";
+import LodingButton from "@/components/LodingButton";
 export default function Addwork() {
   const { toast } = useToast();
 
@@ -106,10 +107,11 @@ export default function Addwork() {
       setcount(count - 5);
     }
   };
+  const [ispending, setispending] = useState(false);
 
   const submithandler = async (values: AddtaskValue) => {
-  
     try {
+      setispending(true);
       const { data } = await axios.post("/api/taskforsatff", {
         username: values.username,
         task1: allTodo.task1,
@@ -138,11 +140,11 @@ export default function Addwork() {
         task2: "",
         task3: "",
         task4: "",
-        task5:"",
+        task5: "",
         task6: "",
         task7: "",
         task8: "",
-        task9:"",
+        task9: "",
         task10: "",
         task11: "",
         task12: "",
@@ -152,34 +154,34 @@ export default function Addwork() {
         task16: "",
         task17: "",
         task18: "",
-        task19:"",
+        task19: "",
         task20: "",
       });
       toast({
         description: data.message,
       });
-
-     
     } catch (error) {
       if (isAxiosError(error)) {
         const errorMessage =
-          error.response?.data?.message || "An unexpected error occurred";
+          error.response?.data?.message || "Faild to send work for staff.";
         toast({
           description: errorMessage,
           variant: "destructive",
         });
       }
+    } finally {
+      setispending(false);
     }
   };
 
   const onSubmit = async (dipartment: AutoselectnameValue) => {
     try {
+      setispending(true);
       const { data } = await axios.post("/api/autofillstaffwork", {
         dipartment,
       });
 
-      console.log(data)
-      if(data){
+      if (data.StaffWork.length >= 1) {
         setalltodo({
           task1: data.StaffWork[0].task1,
           task2: data.StaffWork[0].task2,
@@ -202,17 +204,22 @@ export default function Addwork() {
           task19: data.StaffWork[0].task19,
           task20: data.StaffWork[0].task10,
         });
-      }else{
+
+        toast({
+          description: "Data loaded. Please check your input.",
+          variant: "default",
+        });
+      } else {
         setalltodo({
           task1: "",
           task2: "",
           task3: "",
           task4: "",
-          task5:"",
+          task5: "",
           task6: "",
           task7: "",
           task8: "",
-          task9:"",
+          task9: "",
           task10: "",
           task11: "",
           task12: "",
@@ -222,14 +229,24 @@ export default function Addwork() {
           task16: "",
           task17: "",
           task18: "",
-          task19:"",
+          task19: "",
           task20: "",
         });
-      }
-     
 
-      
-    } catch (error) {}
+        toast({
+          description: "No any data is fill by admin.",
+          variant: "default",
+        });
+      }
+    } catch (error) {
+      toast({
+        description:
+          "Faild to load data for admin because in this department staff is not present.",
+        variant: "destructive",
+      });
+    } finally {
+      setispending(false);
+    }
   };
 
   let changehandler = (event: any) => {
@@ -246,7 +263,7 @@ export default function Addwork() {
             name="dipartment"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Auto Fill Inpute</FormLabel>
+                <FormLabel>Auto fill task please select department.</FormLabel>
                 <FormControl>
                   <Select
                     onValueChange={(dipartment: any) => onSubmit(dipartment)}
@@ -257,7 +274,7 @@ export default function Addwork() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectLabel>Dipartment</SelectLabel>
+                        <SelectLabel>Department</SelectLabel>
                         <SelectItem value="HR">1) HR</SelectItem>
                         <SelectItem value="BRANCH MANAGER / HR EXE">
                           2) BRANCH MANAGER / HR EXE
@@ -309,7 +326,7 @@ export default function Addwork() {
             name="username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Dipartment</FormLabel>
+                <FormLabel>Select department for give some today's task for staff.</FormLabel>
                 <FormControl>
                   <Select
                     onValueChange={field.onChange}
@@ -374,7 +391,7 @@ export default function Addwork() {
                     <FormLabel>Add Task 1</FormLabel>
                     <FormControl>
                       <Input
-                       className="border-foreground"
+                        className="border-foreground"
                         placeholder="Add Task 1"
                         {...field}
                         value={allTodo.task1}
@@ -394,7 +411,7 @@ export default function Addwork() {
                     <FormLabel>Add Task 2</FormLabel>
                     <FormControl>
                       <Input
-                       className="border-foreground"
+                        className="border-foreground"
                         placeholder="Add Task 2"
                         {...field}
                         value={allTodo.task2}
@@ -413,7 +430,7 @@ export default function Addwork() {
                     <FormLabel>Add Task 3</FormLabel>
                     <FormControl>
                       <Input
-                       className="border-foreground"
+                        className="border-foreground"
                         placeholder="Add Task 3"
                         {...field}
                         value={allTodo.task3}
@@ -432,7 +449,7 @@ export default function Addwork() {
                     <FormLabel>Add Task 4</FormLabel>
                     <FormControl>
                       <Input
-                      className="border-foreground"
+                        className="border-foreground"
                         placeholder="Add Task 4"
                         {...field}
                         value={allTodo.task4}
@@ -451,7 +468,7 @@ export default function Addwork() {
                     <FormLabel>Add Task 5</FormLabel>
                     <FormControl>
                       <Input
-                       className="border-foreground"
+                        className="border-foreground"
                         placeholder="Add Task 5"
                         {...field}
                         value={allTodo.task5}
@@ -473,7 +490,7 @@ export default function Addwork() {
                     <FormLabel>Add Task 6</FormLabel>
                     <FormControl>
                       <Input
-                       className="border-foreground"
+                        className="border-foreground"
                         placeholder="Add Task 6"
                         {...field}
                         value={allTodo.task6}
@@ -492,7 +509,7 @@ export default function Addwork() {
                     <FormLabel>Add Task 7</FormLabel>
                     <FormControl>
                       <Input
-                       className="border-foreground"
+                        className="border-foreground"
                         placeholder="Add Task 7"
                         {...field}
                         value={allTodo.task7}
@@ -511,7 +528,7 @@ export default function Addwork() {
                     <FormLabel>Add Task 8</FormLabel>
                     <FormControl>
                       <Input
-                       className="border-foreground"
+                        className="border-foreground"
                         placeholder="Add Task 8"
                         {...field}
                         value={allTodo.task8}
@@ -530,7 +547,7 @@ export default function Addwork() {
                     <FormLabel>Add Task 9</FormLabel>
                     <FormControl>
                       <Input
-                       className="border-foreground"
+                        className="border-foreground"
                         placeholder="Add Task 9"
                         {...field}
                         value={allTodo.task9}
@@ -549,7 +566,7 @@ export default function Addwork() {
                     <FormLabel>Add Task 10</FormLabel>
                     <FormControl>
                       <Input
-                       className="border-foreground"
+                        className="border-foreground"
                         placeholder="Add Task 10"
                         {...field}
                         value={allTodo.task10}
@@ -571,7 +588,7 @@ export default function Addwork() {
                     <FormLabel>Add Task 11</FormLabel>
                     <FormControl>
                       <Input
-                       className="border-foreground"
+                        className="border-foreground"
                         placeholder="Add Task 11"
                         {...field}
                         value={allTodo.task11}
@@ -590,7 +607,7 @@ export default function Addwork() {
                     <FormLabel>Add Task 12</FormLabel>
                     <FormControl>
                       <Input
-                       className="border-foreground"
+                        className="border-foreground"
                         placeholder="Add Task 12"
                         {...field}
                         value={allTodo.task12}
@@ -609,7 +626,7 @@ export default function Addwork() {
                     <FormLabel>Add Task 13</FormLabel>
                     <FormControl>
                       <Input
-                       className="border-foreground"
+                        className="border-foreground"
                         placeholder="Add Task 13"
                         {...field}
                         value={allTodo.task13}
@@ -628,7 +645,7 @@ export default function Addwork() {
                     <FormLabel>Add Task 14</FormLabel>
                     <FormControl>
                       <Input
-                       className="border-foreground"
+                        className="border-foreground"
                         placeholder="Add Task 14"
                         {...field}
                         value={allTodo.task14}
@@ -647,7 +664,7 @@ export default function Addwork() {
                     <FormLabel>Add Task 15</FormLabel>
                     <FormControl>
                       <Input
-                       className="border-foreground"
+                        className="border-foreground"
                         placeholder="Add Task 15"
                         {...field}
                         value={allTodo.task15}
@@ -669,7 +686,7 @@ export default function Addwork() {
                     <FormLabel>Add Task 16</FormLabel>
                     <FormControl>
                       <Input
-                       className="border-foreground"
+                        className="border-foreground"
                         placeholder="Add Task 16"
                         {...field}
                         value={allTodo.task16}
@@ -688,7 +705,7 @@ export default function Addwork() {
                     <FormLabel>Add Task 17</FormLabel>
                     <FormControl>
                       <Input
-                       className="border-foreground"
+                        className="border-foreground"
                         placeholder="Add Task 17"
                         {...field}
                         value={allTodo.task17}
@@ -707,7 +724,7 @@ export default function Addwork() {
                     <FormLabel>Add Task 18</FormLabel>
                     <FormControl>
                       <Input
-                       className="border-foreground"
+                        className="border-foreground"
                         placeholder="Add Task 18"
                         {...field}
                         value={allTodo.task18}
@@ -726,7 +743,7 @@ export default function Addwork() {
                     <FormLabel>Add Task 19</FormLabel>
                     <FormControl>
                       <Input
-                       className="border-foreground"
+                        className="border-foreground"
                         placeholder="Add Task 19"
                         {...field}
                         value={allTodo.task19}
@@ -745,7 +762,7 @@ export default function Addwork() {
                     <FormLabel>Add Task 20</FormLabel>
                     <FormControl>
                       <Input
-                       className="border-foreground"
+                        className="border-foreground"
                         placeholder="Add Task 20"
                         {...field}
                         value={allTodo.task20}
@@ -761,7 +778,9 @@ export default function Addwork() {
             ""
           )}
 
-          <Button type="submit">submit</Button>
+          <LodingButton loding={ispending} type="submit" className="w-full">
+            Submit
+          </LodingButton>
         </form>
       </Form>
 

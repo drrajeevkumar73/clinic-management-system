@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 
 interface MenuBarProps {
   className?: string;
@@ -30,19 +31,20 @@ export default function Menubar({ className }: MenuBarProps) {
     setdropdowna(!dropdowna);
    
   };
+  const pathname=usePathname()
   return (
     <div className={`${value ? "block" : "hidden"} ${className}`}>
       <Image src={logo} alt="" />
       <div className="space-y-5 p-6">
         <Button
-          className="flex items-center justify-start gap-3"
+          className={`flex items-center justify-start gap-3 font-bold ${pathname=="/"?"bg-yellow-400 text-black hover:bg-yellow-200":""}`}
           title="Dashboard"
           asChild
         >
           <Link href={"/"}>Dashboard</Link>
         </Button>
         <Button
-          className="flex cursor-pointer items-center justify-start gap-3"
+          className="flex cursor-pointer items-center justify-start gap-3 font-bold"
           title="Attendance"
           asChild
           onClick={dropHandlerad}
@@ -50,17 +52,17 @@ export default function Menubar({ className }: MenuBarProps) {
           <p>Attendance </p>
         </Button>
         <div
-          className={`space-y-5 rounded-md border p-3 shadow-lg ${dropdowna ? "block" : "hidden"}`}
+          className={`space-y-5 rounded-md border p-3 shadow-lg ${dropdowna ? "block" : "hidden"} `}
         >
           <Button
-            className="flex items-center justify-start gap-3"
-            title="Add Work for Attendance"
+            className={`flex items-center justify-start gap-3 ${pathname=="/attendance"?"bg-yellow-400 text-black hover:bg-yellow-200":""}`}
+            title="Wrok For Me"
             asChild
           >
-            <Link href={"/attendance"}>Add Work for Attendance</Link>
+            <Link href={"/attendance"}>Add Today&lsquo;s Task</Link>
           </Button>
           <Button
-            className="flex items-center justify-start gap-3"
+            className={`flex items-center justify-start gap-3 ${pathname=="/setask"?"bg-yellow-400 text-black hover:bg-yellow-200":""}`}
             title="See Task"
             asChild
           >
@@ -69,7 +71,7 @@ export default function Menubar({ className }: MenuBarProps) {
         </div>
 
         <Button
-          className="flex cursor-pointer items-center justify-start gap-3"
+          className="flex cursor-pointer items-center justify-start gap-3 font-bold"
           title="Admin"
           asChild
           onClick={dropHandler}
@@ -80,26 +82,20 @@ export default function Menubar({ className }: MenuBarProps) {
           className={`space-y-5 rounded-md border p-3 shadow-lg ${dropdown ? "block" : "hidden"}`}
         >
           <Button
-            className="flex items-center justify-start gap-3"
+            className={`flex items-center justify-start gap-3 ${pathname=="/admin"?"bg-yellow-400 text-black hover:bg-yellow-200":""}`}
             title="Work History"
             asChild
           >
             <Link href={"/admin"}>Work History</Link>
           </Button>
           <Button
-            className="flex items-center justify-start gap-3"
+            className={`flex items-center justify-start gap-3 ${pathname=="/addwork"?"bg-yellow-400 text-black hover:bg-yellow-200":""}`}
             title="Add Task"
             asChild
           >
             <Link href={"/addwork"}>Add Task</Link>
           </Button>
-          <Button
-            className="flex items-center justify-start gap-3"
-            title="See Task"
-            asChild
-          >
-            <Link href={"/seetask-admmin"}>See Task</Link>
-          </Button>
+       
         </div>
       </div>
     </div>

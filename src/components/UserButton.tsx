@@ -19,6 +19,7 @@ import {
 
   import { useTheme } from "next-themes";
 import UserAvatar from "./UserAvatar";
+import { logout } from "@/app/(auth)/actions";
 
   
 
@@ -43,10 +44,7 @@ export default function UserButton({ className }: clasnameProps) {
         <DropdownMenuLabel>Logged in as {user.displayname}</DropdownMenuLabel>
         <DropdownMenuSeparator />
        
-          <DropdownMenuItem>
-            <UserIcon className="mr-2 size-4" />
-            Profile
-          </DropdownMenuItem>
+          
           <DropdownMenuItem>
             <Diameter className="mr-2 size-4" />
             Department as {user.dipartment}
@@ -79,7 +77,9 @@ export default function UserButton({ className }: clasnameProps) {
         </DropdownMenuSub>
         <DropdownMenuSeparator />
         <DropdownMenuItem
-         
+         onClick={() => {
+          logout();
+        }}
         >
           <LogOutIcon className="mr-2 size-4" />
           Logout

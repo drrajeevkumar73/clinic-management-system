@@ -44,6 +44,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { formatRelativeMonthDate, formatRelativeTime } from "@/lib/utils";
 import { useAppSelector } from "@/lib/hooks";
+import LodingButton from "../LodingButton";
+import { useToast } from "@/hooks/use-toast";
 
 export default function AminCheckdata() {
   const form = useForm<SerchValue>({
@@ -70,23 +72,34 @@ export default function AminCheckdata() {
     dipartment: "",
     totalwork: "",
   });
- 
-  const onSubmit = async (value: SerchValue) => {
-    const data = await axios.post("/api/adminchekr", {
-      username: value.username,
-      monthname: value.monthname,
-    });
 
-    setdaat(data.data.userdata);
-    setprrsent({
-      displayname : data.data.displanem,
-      dipartment : data.data.department,
-      totalwork : data.data.totalwork,
-    });
+  const { toast } = useToast();
+  const [ispending, setispending] = useState(false);
+  const onSubmit = async (value: SerchValue) => {
+    try {
+      setispending(true);
+      const data = await axios.post("/api/adminchekr", {
+        username: value.username,
+        monthname: value.monthname,
+      });
+
+      setdaat(data.data.userdata);
+      setprrsent({
+        displayname: data.data.displanem,
+        dipartment: data.data.department,
+        totalwork: data.data.totalwork,
+      });
+    } catch (error) {
+      toast({
+        description: "Faild to check user data",
+        variant: "destructive",
+      });
+    } finally {
+      setispending(false);
+    }
   };
   return (
     <>
-    
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -165,7 +178,9 @@ export default function AminCheckdata() {
             )}
           />
 
-          <Button type="submit">Submit</Button>
+          <LodingButton loding={ispending} type="submit" className="w-full">
+            Submit
+          </LodingButton>
         </form>
       </Form>
 
@@ -194,31 +209,48 @@ export default function AminCheckdata() {
         <TableHeader className="border border-primary">
           <TableRow className="border border-primary bg-primary">
             <TableHead className="w-[100px]">Date</TableHead>
-
             <TableHead>Work</TableHead>
             <TableHead className="text-right">Time</TableHead>
           </TableRow>
         </TableHeader>
 
-        {data?.map((v: any, i) => (
-          <TableBody className="border border-primary" key={i}>
+        {/* Loading State */}
+        {ispending ? (
+          <tbody>
             <TableRow>
-              <TableCell className="font-medium">
-                {formatRelativeMonthDate(v.createdAt)}
-              </TableCell>
-
-              <TableCell className="whitespace-pre-line break-words">
-                {v.content}
-              </TableCell>
-              <TableCell className="text-right">
-                {formatRelativeTime(v.createdAt)}
+              <TableCell colSpan={3} >
+                Loading...
               </TableCell>
             </TableRow>
-          </TableBody>
-        ))}
+          </tbody>
+        ) : data && data.length > 0 ? (
+          /* Data Rows */
+          data.map((v: any, i) => (
+            <TableBody className="border border-primary" key={i}>
+              <TableRow>
+                <TableCell className="font-medium">
+                  {formatRelativeMonthDate(v.createdAt)}
+                </TableCell>
+                <TableCell className="whitespace-pre-line break-words">
+                  {v.content || "No Content"}
+                </TableCell>
+                <TableCell className="text-right">
+                  {formatRelativeTime(v.createdAt)}
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          ))
+        ) : (
+          /* No Data State */
+          <tbody>
+            <TableRow>
+              <TableCell colSpan={3} >
+                No data available
+              </TableCell>
+            </TableRow>
+          </tbody>
+        )}
       </Table>
-
-     
     </>
   );
 }

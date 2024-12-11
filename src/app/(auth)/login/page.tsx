@@ -27,7 +27,7 @@ export default function Login() {
               href={"/signup"}
               className="block text-center hover:underline"
             >
-              Already have an account? Log in
+             Create a new account.
             </Link>
           </div>
         </div>
