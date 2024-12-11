@@ -37,8 +37,8 @@ export const serchSchema = z.object({
 export type SerchValue = z.infer<typeof serchSchema>;
 
 export const addtaskSchema = z.object({
-  username:requiredString,
-  task1: requiredString,
+  username: requiredString,
+  task1: z.string().trim(),
   task2: z.string().trim(),
   task3: z.string().trim(),
   task4: z.string().trim(),
@@ -63,9 +63,13 @@ export const addtaskSchema = z.object({
 export type AddtaskValue = z.infer<typeof addtaskSchema>;
 
 export const addtaskUsernameSchema = z.object({
-  monthname:requiredString,
-
-
-})
+  monthname: requiredString,
+});
 
 export type AddtaskUsernameValue = z.infer<typeof addtaskUsernameSchema>;
+
+export const autoSelectSchema = z.object({
+  dipartment: requiredString,
+});
+
+export type AutoselectnameValue = z.infer<typeof autoSelectSchema>;

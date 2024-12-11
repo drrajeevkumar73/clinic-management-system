@@ -53,8 +53,8 @@ model Todayswork {
 
 model StaffWork {
   id     String  @id @default(cuid())
-  userId String
-  task1  String
+  userId String @unique
+  task1  String?
   task2  String?
   task3  String?
   task4  String?
@@ -75,7 +75,7 @@ model StaffWork {
   task19 String?
   task20 String?
 
-  User User @relation(fields: [userId], references: [id])
+  User User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 

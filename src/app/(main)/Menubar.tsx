@@ -54,14 +54,14 @@ export default function Menubar({ className }: MenuBarProps) {
         >
           <Button
             className="flex items-center justify-start gap-3"
-            title="Admin"
+            title="Add Work for Attendance"
             asChild
           >
             <Link href={"/attendance"}>Add Work for Attendance</Link>
           </Button>
           <Button
             className="flex items-center justify-start gap-3"
-            title="Admin"
+            title="See Task"
             asChild
           >
             <Link href={"/setask"}>See Task</Link>
@@ -81,17 +81,24 @@ export default function Menubar({ className }: MenuBarProps) {
         >
           <Button
             className="flex items-center justify-start gap-3"
-            title="Admin"
+            title="Work History"
             asChild
           >
             <Link href={"/admin"}>Work History</Link>
           </Button>
           <Button
             className="flex items-center justify-start gap-3"
-            title="Admin"
+            title="Add Task"
             asChild
           >
-            <Link href={"/addwork"}>Add task</Link>
+            <Link href={"/addwork"}>Add Task</Link>
+          </Button>
+          <Button
+            className="flex items-center justify-start gap-3"
+            title="See Task"
+            asChild
+          >
+            <Link href={"/seetask-admmin"}>See Task</Link>
           </Button>
         </div>
       </div>
